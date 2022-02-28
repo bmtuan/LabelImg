@@ -1,0 +1,7 @@
+line_d
+line_h
+line_w
+line_c
+tron
+vuong
+sao
