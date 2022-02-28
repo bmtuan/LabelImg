@@ -1,7 +1,11 @@
 # LabelImg
 Usage
 -----
-
+RUN
+~~~~~~~~
+cd LabelImg
+python labelimg.py
+~~~~~~~~
 Steps (PascalVOC)
 ~~~~~~~~~~~~~~~~~
 
