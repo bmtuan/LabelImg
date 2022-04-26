@@ -903,8 +903,7 @@ class MainWindow(QMainWindow, WindowMixin):
 			if self.singleClassMode.isChecked() and self.lastLabel:
 				text = self.lastLabel
 			else:
-				# text = self.labelDialog.popUp(text=self.prevLabelText)
-				text = "line_d"
+				text = self.labelDialog.popUp(text=self.prevLabelText)
 				self.lastLabel = text
 		else:
 			text = self.defaultLabelTextLine.text()
@@ -1010,7 +1009,12 @@ class MainWindow(QMainWindow, WindowMixin):
 	def togglePolygons(self, value):
 		for item, shape in self.itemsToShapes.items():
 			item.setCheckState(Qt.Checked if value else Qt.Unchecked)
-
+	def norm_name_gt(self, text):
+		index = text.find('_')
+		text = text.replace('im', '')
+		while text[index+1] == '0':
+		    text = text[:index+1] + text[index+2:]
+		return text
 	def loadFile(self, filePath=None):
 		"""Load the specified file, or the last opened file if None."""
 		self.resetState()
@@ -1082,9 +1086,10 @@ class MainWindow(QMainWindow, WindowMixin):
 				basename = os.path.basename(
 					os.path.splitext(self.filePath)[0])
 				basename = "gt_%s" % basename
+				norm_name = self.norm_name_gt(basename)
 				xmlPath = os.path.join(self.defaultSaveDir, basename + XML_EXT)
 				txtPath = os.path.join(self.defaultSaveDir, basename + TXT_EXT)
-
+				txtPath2 = os.path.join(self.defaultSaveDir, norm_name + TXT_EXT)
 				"""Annotation file priority:
                 PascalXML > YOLO
                 """
@@ -1092,6 +1097,8 @@ class MainWindow(QMainWindow, WindowMixin):
 					self.loadPascalXMLByFilename(xmlPath)
 				elif os.path.isfile(txtPath):
 					self.loadYOLOTXTByFilename(txtPath)
+				elif os.path.isfile(txtPath2):
+					self.loadYOLOTXTByFilename(txtPath2)
 			else:
 				xmlPath = os.path.splitext(filePath)[0] + XML_EXT
 				txtPath = os.path.splitext(filePath)[0] + TXT_EXT
